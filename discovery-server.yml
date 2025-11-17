@@ -1,0 +1,18 @@
+server:
+  port: 8761
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
