@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://postgres-service.itconnect.svc.cluster.local:5432/itconnect
+    url: jdbc:postgresql://localhost:5432/itconnect_chat
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
@@ -11,6 +11,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/oauth2/jwks
 
 supabase:
   s3:
@@ -29,7 +34,7 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-server-backend.itconnect.svc.cluster.local:8761/eureka
+      defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
