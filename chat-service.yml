@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://postgres-service.itconnect.svc.cluster.local:5432/itconnect
+    url: jdbc:postgresql://postgres-service.itconnect.svc.cluster.local:5432/itconnect_chat
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
