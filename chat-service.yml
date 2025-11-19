@@ -39,3 +39,4 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+    hostname: chat-service-backend.itconnect.svc.cluster.local

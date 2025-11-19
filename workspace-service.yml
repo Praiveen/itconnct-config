@@ -31,3 +31,4 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+    hostname: workspace-service-backend.itconnect.svc.cluster.local
