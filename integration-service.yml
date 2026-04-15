@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/itconnect_integration
+    url: jdbc:postgresql://host.docker.internal:5432/itconnect_integration
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
@@ -14,10 +14,14 @@ spring:
     show-sql: true
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
+
+  cloud:
+    compatibility-verifier:
+      enabled: false
 
 management:
   endpoints:
@@ -28,9 +32,9 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server-backend:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    instance-id: ${spring.application.name}:${random.value}

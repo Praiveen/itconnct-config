@@ -7,14 +7,18 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8081/oauth2/jwks
+          jwk-set-uri: http://auth-service-backend:8081/oauth2/jwks
 
   cloud:
+    compatibility-verifier:
+      enabled: false
+
     gateway:
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+
       routes:
         - id: auth-service-auth
           uri: lb://auth-service
@@ -37,22 +41,17 @@ spring:
           filters:
             - name: JwtCookie
 
-        # =========================
-        # CORE SERVICE
-        # =========================
+        # CORE
         - id: core-service-api
           uri: lb://core-service
           predicates:
             - Path=/api/**
-
         - id: core-service-ws
           uri: lb:ws://core-service
           predicates:
             - Path=/ws/**
 
-        # =========================
-        # INTEGRATION SERVICE
-        # =========================
+        # INTEGRATION
         - id: integration-service
           uri: lb://integration-service
           predicates:
@@ -67,9 +66,9 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server-backend:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    instance-id: ${spring.application.name}:${random.value}
