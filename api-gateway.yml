@@ -3,6 +3,12 @@ server:
   forward-headers-strategy: framework
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/oauth2/jwks
+
   cloud:
     gateway:
       discovery:
@@ -14,56 +20,43 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
+          filters:
+            - name: JwtCookie
 
         - id: auth-service-user
           uri: lb://auth-service
           predicates:
             - Path=/user/**
+          filters:
+            - name: JwtCookie
 
         - id: auth-service-oauth2
           uri: lb://auth-service
           predicates:
-            - Path=/oauth2/**,/.well-known/**,/login
+            - Path=/oauth2/**,/.well-known/**,/login,/register,/login/oauth2/**
+          filters:
+            - name: JwtCookie
 
-        - id: chat-service-workspace-chats
-          uri: lb://chat-service
+        # =========================
+        # CORE SERVICE
+        # =========================
+        - id: core-service-api
+          uri: lb://core-service
           predicates:
-            - Path=/workspaces/*/chats/**
+            - Path=/api/**
 
-        - id: chat-service-user-chats
-          uri: lb://chat-service
-          predicates:
-            - Path=/chats/**
-
-        - id: chat-service-files
-          uri: lb://chat-service
-          predicates:
-            - Path=/files/**
-
-        - id: workspace-service
-          uri: lb://workspace-service
-          predicates:
-            - Path=/workspaces/**
-
-        - id: workspace-service-boards
-          uri: lb://workspace-service
-          predicates:
-            - Path=/boards/**
-
-        - id: workspace-service-notifications
-          uri: lb://workspace-service
-          predicates:
-            - Path=/notifications/**
-
-        - id: chat-service
-          uri: lb://chat-service
-          predicates:
-            - Path=/chat/**
-
-        - id: chat-service-ws
-          uri: lb:ws://chat-service
+        - id: core-service-ws
+          uri: lb:ws://core-service
           predicates:
             - Path=/ws/**
+
+        # =========================
+        # INTEGRATION SERVICE
+        # =========================
+        - id: integration-service
+          uri: lb://integration-service
+          predicates:
+            - Path=/integrations/**
 
 management:
   endpoints:
@@ -74,8 +67,9 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-server-backend.itconnect.svc.cluster.local:8761/eureka
+      defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
-    prefer-ip-address: false
+    prefer-ip-address: true
+    hostname: localhost
