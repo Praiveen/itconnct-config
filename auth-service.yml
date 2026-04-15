@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://host.docker.internal:5432/itconnect_auth
     username: postgres
-    password: 12345
+    password: "12345"
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -14,13 +14,30 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 3333ergewgewfe
+            client-secret: 3333322gggggefeefwe
+            scope:
+              - openid
+              - profile
+              - email
+          github:
+            client-id: jknhbtrf45676uy
+            client-secret: 3456yhuhbgvferftgyhu
+            scope:
+              - read:user
+              - user:email
+
   cloud:
     compatibility-verifier:
       enabled: false
 
 security:
   jwt:
-    # оставь как у тебя (или перенеси в secret)
     secret-key: 13615f1179d5e7fa8376af3f3c0b127e27a65c2782ef2ff9da1eb6a7f294d18a
     expiration-time: 3600000
 
